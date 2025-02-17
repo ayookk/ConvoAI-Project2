@@ -1,0 +1,3 @@
+Category: POSITIVE
+Score: 0.90
+Magnitude: 0.90

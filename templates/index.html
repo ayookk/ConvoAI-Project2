@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio App</title>
+    <script src="/script.js" defer></script>
+    <style>
+        .file-container {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .file-links a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: blue;
+        }
+        .file-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Record and Upload Audio</h1>
+    <button id="record">Record</button>
+    <button id="stop">Stop</button>
+    <span id="timer">00:00</span>
+
+    <h2>Recorded Files</h2>
+    {% for file in files %}
+    <div class="file-container">
+        <audio controls>
+            <source src="{{ url_for('uploaded_file', filename=file.audio) }}" type="audio/wav">
+        </audio>
+        <div class="file-links">
+            <a href="{{ url_for('uploaded_file', filename=file.audio) }}">{{ file.audio }}</a>
+            {% if file.transcript %}
+            <a href="{{ url_for('uploaded_file', filename=file.transcript) }}">Transcript</a>
+            {% endif %}
+            {% if file.sentiment %}
+            <a href="{{ url_for('uploaded_file', filename=file.sentiment) }}">Sentiment</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <h1>Type in your text to generate audio</h1>
+    <form action="/upload_text" method="POST">
+        <textarea name="text" rows="10" cols="50"></textarea><br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
