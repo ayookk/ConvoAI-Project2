@@ -4,50 +4,128 @@
     <title>Audio App</title>
     <script src="/script.js" defer></script>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .left, .right {
+            width: 45%;
+        }
+        h1, h2 {
+            font-weight: bold;
+            color: #333;
+        }
         .file-container {
-            margin: 20px 0;
-            padding: 10px;
+            margin: 15px 0;
+            padding: 15px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .file-links {
+            margin-top: 10px;
         }
         .file-links a {
+            display: inline-block;
             margin-right: 10px;
             text-decoration: none;
-            color: blue;
+            color: #2196F3;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background-color: #fff;
+            border: 1px solid #2196F3;
         }
         .file-links a:hover {
-            text-decoration: underline;
+            background-color: #2196F3;
+            color: white;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        #timer {
+            font-family: monospace;
+            font-size: 1.2em;
+            margin-left: 10px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+        }
+        .sentiment {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        .sentiment-POSITIVE {
+            background-color: #A5D6A7;
+            color: #1B5E20;
+        }
+        .sentiment-NEGATIVE {
+            background-color: #EF9A9A;
+            color: #B71C1C;
+        }
+        .sentiment-NEUTRAL {
+            background-color: #E0E0E0;
+            color: #424242;
         }
     </style>
 </head>
 <body>
-    <h1>Record and Upload Audio</h1>
-    <button id="record">Record</button>
-    <button id="stop">Stop</button>
-    <span id="timer">00:00</span>
+    <div class="left">
+        <h1>Record and Upload Audio</h1>
+        <button id="record">Record</button>
+        <button id="stop">Stop</button>
+        <span id="timer">00:00</span>
 
-    <h2>Recorded Files</h2>
-    {% for file in files %}
-    <div class="file-container">
-        <audio controls>
-            <source src="{{ url_for('uploaded_file', filename=file.audio) }}" type="audio/wav">
-        </audio>
-        <div class="file-links">
-            <a href="{{ url_for('uploaded_file', filename=file.audio) }}">{{ file.audio }}</a>
-            {% if file.transcript %}
-            <a href="{{ url_for('uploaded_file', filename=file.transcript) }}">Transcript</a>
-            {% endif %}
-            {% if file.sentiment %}
-            <a href="{{ url_for('uploaded_file', filename=file.sentiment) }}">Sentiment</a>
-            {% endif %}
+        <h2>Recorded Files</h2>
+        {% for file in files %}
+        <div class="file-container">
+            <audio controls>
+                <source src="{{ url_for('uploaded_file', filename=file.audio) }}" type="audio/wav">
+            </audio>
+            <div class="file-links">
+                <a href="{{ url_for('uploaded_file', filename=file.audio) }}">Audio</a>
+                {% if file.transcript %}
+                <a href="{{ url_for('uploaded_file', filename=file.transcript) }}">Transcript</a>
+                {% endif %}
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 
-    <h1>Type in your text to generate audio</h1>
-    <form action="/upload_text" method="POST">
-        <textarea name="text" rows="10" cols="50"></textarea><br>
-        <input type="submit" value="Upload">
-    </form>
+    <div class="right">
+        <h1>Type in your text to generate audio</h1>
+        <form action="/upload_text" method="POST">
+            <textarea name="text" rows="15" cols="40" placeholder="Enter your text here..."></textarea><br>
+            <input type="submit" value="Generate Audio">
+        </form>
+    </div>
 </body>
 </html>
